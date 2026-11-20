@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0e1013">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Workout">
+<title>Cooper Pate — 6-Week Program</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0e1013; --card:#171a1f; --card2:#1d2127; --line:#262b33;
+    --text:#f1f1ee; --muted:#8b919b; --volt:#d6ff3d; --volt-dim:rgba(214,255,61,.14);
+    --run:#5ad1ff; --run-dim:rgba(90,209,255,.14);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--text);font-family:Barlow,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  button,input,textarea{font:inherit;color:inherit}
+  button{cursor:pointer}
+  .wrap{max-width:640px;margin:0 auto;padding:calc(20px + env(safe-area-inset-top)) 16px 120px}
+  .display{font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.02em}
+
+  header{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:18px}
+  .eyebrow{font-family:"Barlow Condensed";font-weight:700;letter-spacing:.18em;font-size:13px;color:var(--volt)}
+  h1{margin:2px 0 0;font-size:38px;line-height:.95;font-weight:800}
+  .sync{font-size:12px;color:var(--muted);text-align:right;line-height:1.3;white-space:nowrap}
+  .sync b{display:block;font-family:"Barlow Condensed";font-size:26px;color:var(--text);font-weight:700}
+
+  .weeks{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:14px}
+  .wk{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 0 7px;text-align:center}
+  .wk .n{font-family:"Barlow Condensed";font-weight:700;font-size:18px}
+  .wk .l{font-size:10px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+  .wk .bar{height:3px;margin:6px 8px 0;background:var(--line);border-radius:2px;overflow:hidden}
+  .wk .bar i{display:block;height:100%;background:var(--volt);width:0}
+  .wk.on{border-color:var(--volt);background:var(--volt-dim)}
+  .wk.on .l{color:var(--volt)}
+
+  .days{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 -16px 12px;padding:0 16px 10px}
+  .days::-webkit-scrollbar{display:none}
+  .day{flex:0 0 auto;min-width:76px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 10px;text-align:left;position:relative}
+  .day .d{font-family:"Barlow Condensed";font-weight:700;font-size:13px;letter-spacing:.12em;color:var(--muted)}
+  .day .t{font-weight:600;font-size:14px;white-space:nowrap}
+  .day.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+  .day.on .d{color:#555}
+  .day .ck{position:absolute;top:7px;right:7px;width:14px;height:14px;border-radius:50%;background:var(--volt);display:none}
+  .day .ck::after{content:"";position:absolute;left:4.5px;top:2px;width:3px;height:6px;border:solid #0e1013;border-width:0 2px 2px 0;transform:rotate(45deg)}
+  .day.done .ck{display:block}
+  .day.today::before{content:"TODAY";position:absolute;bottom:-7px;left:10px;font-size:9px;letter-spacing:.14em;font-weight:700;background:var(--volt);color:#0e1013;padding:1px 5px;border-radius:4px}
+
+  .dayhead{display:flex;justify-content:space-between;align-items:baseline;margin:6px 0 8px}
+  .dayhead h2{margin:0;font-size:30px;font-weight:800}
+  .dayhead .c{color:var(--muted);font-size:14px}
+  .prog{height:6px;background:var(--card);border-radius:3px;overflow:hidden;margin-bottom:16px}
+  .prog i{display:block;height:100%;background:var(--volt);width:0;transition:width .3s}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px;transition:border-color .2s,background .2s}
+  .card.done{border-color:rgba(214,255,61,.45);background:linear-gradient(0deg,var(--volt-dim),var(--volt-dim)),var(--card)}
+  .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .name{font-weight:600;font-size:17px;line-height:1.2}
+  .num{font-family:"Barlow Condensed";color:var(--muted);font-weight:700;font-size:13px;margin-right:6px}
+  .pill{font-family:"Barlow Condensed";font-weight:700;font-size:16px;background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:2px 9px;white-space:nowrap}
+  .row{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
+  .wt{display:flex;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:10px;height:42px;padding:0 10px;width:112px}
+  .wt input{width:100%;background:none;border:0;outline:0;font-family:"Barlow Condensed";font-size:22px;font-weight:700}
+  .wt span{font-size:12px;color:var(--muted)}
+  .wt:focus-within{border-color:var(--volt)}
+  .prev{font-size:12px;color:var(--muted);margin-top:3px}
+  .wt input::placeholder{color:#4b515a}
+  .sets{display:flex;gap:7px;margin-left:auto}
+  .set{width:38px;height:38px;border-radius:50%;border:2px solid var(--line);background:var(--bg);font-family:"Barlow Condensed";font-weight:700;font-size:16px;color:var(--muted);display:grid;place-items:center;transition:all .15s}
+  .set.on{background:var(--volt);border-color:var(--volt);color:#0e1013}
+  input.set{text-align:center;outline:0;padding:0;-moz-appearance:textfield}
+  input.set::-webkit-outer-spin-button,input.set::-webkit-inner-spin-button{-webkit-appearance:none}
+  input.set:focus{border-color:var(--volt)}
+  input.set.on{color:#0e1013}
+  input.set::placeholder{color:#4b515a}
+
+  .card.run{border-left:3px solid var(--run)}
+  .card.run.done{border-color:rgba(90,209,255,.55);background:linear-gradient(0deg,var(--run-dim),var(--run-dim)),var(--card)}
+  .sub{color:var(--muted);font-size:14px;margin-top:3px}
+  .runtoggle{border:2px solid var(--line);background:var(--bg);border-radius:10px;height:42px;padding:0 14px;font-weight:600;font-size:14px;color:var(--muted)}
+  .card.run.done .runtoggle{background:var(--run);border-color:var(--run);color:#0e1013}
+  .field{display:flex;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:10px;height:42px;padding:0 10px;flex:1;min-width:90px}
+  .field input{width:100%;background:none;border:0;outline:0;font-size:16px}
+  .field span{font-size:12px;color:var(--muted)}
+  .field:focus-within{border-color:var(--run)}
+  textarea{width:100%;margin-top:10px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;resize:vertical;min-height:44px;outline:0;font-size:15px}
+  textarea:focus{border-color:var(--muted)}
+
+  .timer{position:fixed;left:0;right:0;bottom:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(14,16,19,.92);backdrop-filter:blur(10px);border-top:1px solid var(--line)}
+  .timer .in{max-width:640px;margin:0 auto;display:flex;align-items:center;gap:8px}
+  .timer .lbl{font-family:"Barlow Condensed";font-weight:700;letter-spacing:.14em;font-size:13px;color:var(--muted);margin-right:auto}
+  .timer .clock{font-family:"Barlow Condensed";font-weight:800;font-size:30px;min-width:76px;text-align:right;margin-right:4px}
+  .timer.live .clock{color:var(--volt)}
+  .timer.over .clock{color:#ff6a4d;animation:pulse 1s infinite}
+  @keyframes pulse{50%{opacity:.35}}
+  .tbtn{background:var(--card);border:1px solid var(--line);border-radius:9px;height:38px;padding:0 12px;font-weight:600;font-size:14px}
+  .tbtn.stop{color:var(--muted)}
+  .foot{color:var(--muted);font-size:12px;text-align:center;margin-top:22px}
+  .foot button{background:none;border:0;color:var(--muted);text-decoration:underline;font-size:12px}
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:20px;z-index:10}
+  .modal.show{display:flex}
+  .modal .box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;max-width:340px}
+  .modal p{margin:0 0 14px;line-height:1.4}
+  .modal .acts{display:flex;gap:8px;justify-content:flex-end}
+  .danger{background:#ff6a4d;color:#0e1013;border:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow">COOPER PATE</div>
+      <h1 class="display">6-Week<br>Program</h1>
+    </div>
+    <div class="sync"><b id="overall">0%</b><span id="syncnote">Saved on this phone</span></div>
+  </header>
+
+  <div class="weeks" id="weeks"></div>
+  <div class="days" id="days"></div>
+
+  <div class="dayhead"><h2 class="display" id="dtitle"></h2><span class="c" id="dcount"></span></div>
+  <div class="prog"><i id="dprog"></i></div>
+  <div id="list"></div>
+
+  <div class="foot">Tap a set when it's done. Last week's weight shows as a hint for each lift.<br><button id="clearDay">Clear this day</button></div>
+</div>
+
+<div class="timer" id="timer"><div class="in">
+  <span class="lbl">REST</span>
+  <span class="clock" id="clock">0:00</span>
+  <button class="tbtn" data-t="60">1:00</button>
+  <button class="tbtn" data-t="90">1:30</button>
+  <button class="tbtn" data-t="120">2:00</button>
+  <button class="tbtn stop" id="tstop">Stop</button>
+</div></div>
+
+<div class="modal" id="modal"><div class="box">
+  <p id="mtext"></p>
+  <div class="acts"><button class="tbtn" id="mno">Cancel</button><button class="tbtn danger" id="myes">Clear</button></div>
+</div></div>
+
+<script>
+const PROGRAM = [
+  {key:'mon', d:'MON', title:'Pull', items:[
+    ['Machine Rows','4x12'],['Machine Lat Pull Downs','4x10'],['Smith Machine Row','4x8'],
+    ['Single Arm Cable Lat','4x12'],['DB Hammer Curl','4x10'],['Machine Curls','4x12'],
+    ['Face Pulls','3x15'],['20.20s','2xAMRAP']]},
+  {key:'tue', d:'TUE', title:'Push', items:[
+    ['YTW Raises','3x15'],['Band Rotation','4x3'],['Kettlebell Raises','3x10'],
+    ['External/Internal Rotation','3x10'],['Upright Rows','4x10'],['Chest Flys','4x12'],
+    ['Smith Machine Incline Press','4x8'],['DB Bench Press','4x8'],['Tricep Push Downs','4x10'],
+    ['Tricep Crossovers','4x10'],['Ab Roller','3xAMRAP'],
+    {run:true,name:'5 Mile Run',sub:'After the lift'}]},
+  {key:'wed', d:'WED', title:'Shoulders + Legs', items:[
+    ['Cable Lat Flys','3x10'],['DB Lat Flys','3x15'],['Overhead Shoulder Press','4x12'],
+    ['Leg Extension','4x12'],['Smith Machine Squat','4x10'],['Leg Press','4x12'],
+    ['Machine Kickbacks','3x12'],['Hamstring Curls','3x10'],['Calf Raises','4x12'],
+    ['DB Russian Twist','3x12']]},
+  {key:'thu', d:'THU', title:'Run', items:[
+    {run:true,name:'Track Workout',sub:'Intervals / speed work'},
+    {run:true,name:'Stretch or Yoga',sub:'Recovery', noDist:true}]},
+  {key:'fri', d:'FRI', title:'Chest / Back', items:[
+    ['Pull Up','4xAMRAP'],['DB Incline Bench Press','4x10'],['DB Rows','4x8'],['Chest Flys','4x12'],
+    ['Lat Pulldowns','4x10'],['Machine Chest Press','4x10'],['Cable Overhead Tricep Ext','3x10'],
+    ['Barbell Preacher Curls','3x10'],['Tricep Extension','3x10'],['DB Curls','3x10'],
+    ['Cable Crunches','3x12']]},
+  {key:'sat', d:'SAT', title:'Legs (Hams/Glutes)', items:[
+    ['Band Work','4xAMRAP'],['Hip Raises','4x10'],['Front Squat','4x10'],['Bulgarian Split Squats','4x8'],
+    ['High Leg Press','4x12'],['Abductor/Adductors','3x10'],['RDL','4x8'],['Leg Curl','4x12'],
+    ['Calf Raises','4x12'],['Side Bends','3x12'],['Back Extension','3x20']]},
+  {key:'sun', d:'SUN', title:'Long Run', items:[
+    {run:true,name:'Long Run',sub:'Marathon prep'}]},
+];
+const WEEKS = 6;
+const LS_KEY = 'cooper-pate-6wk-v1';
+const short = {mon:'Pull',tue:'Push',wed:'Shldr + Legs',thu:'Run',fri:'Chest/Back',sat:'Legs',sun:'Long Run'};
+
+function parse(s){const [a,b]=s.split('x');return {sets:+a,reps:b,amrap:b==='AMRAP'};}
+
+// ---------- state ----------
+let state = {log:{}, ui:{}, updatedAt:0};
+try{const raw=localStorage.getItem(LS_KEY); if(raw) state=Object.assign(state,JSON.parse(raw));}catch(e){}
+const todayKey = ['sun','mon','tue','wed','thu','fri','sat'][new Date().getDay()];
+let week = state.ui.week || 1;
+let day = todayKey;
+
+const k = (w,d,i)=>`${w}|${d}|${i}`;
+const get = (w,d,i)=>state.log[k(w,d,i)]||{};
+function put(w,d,i,patch){
+  const cur=Object.assign({},get(w,d,i),patch);
+  state.log[k(w,d,i)]=cur; touch();
+}
+function touch(){state.updatedAt=Date.now(); saveLocal(); queueRemote();}
+function saveLocal(){try{localStorage.setItem(LS_KEY,JSON.stringify(state));}catch(e){}}
+
+function itemDone(w,dk,i,it){
+  const e=get(w,dk,i);
+  if(it.run) return !!e.done;
+  const p=parse(it[1]); const s=e.s||[];
+  for(let j=0;j<p.sets;j++){ if(!s[j]) return false; }
+  return true;
+}
+function dayStats(w,dk){
+  const D=PROGRAM.find(x=>x.key===dk); let done=0;
+  D.items.forEach((it,i)=>{if(itemDone(w,dk,i,it))done++;});
+  return {done,total:D.items.length};
+}
+function weekPct(w){let d=0,t=0;PROGRAM.forEach(D=>{const s=dayStats(w,D.key);d+=s.done;t+=s.total;});return d/t;}
+
+// ---------- render ----------
+const $=id=>document.getElementById(id);
+function renderWeeks(){
+  $('weeks').innerHTML='';
+  for(let w=1;w<=WEEKS;w++){
+    const b=document.createElement('button');
+    b.className='wk'+(w===week?' on':'');
+    b.innerHTML=`<div class="l">Week</div><div class="n">${w}</div><div class="bar"><i style="width:${Math.round(weekPct(w)*100)}%"></i></div>`;
+    b.onclick=()=>{week=w;state.ui.week=w;saveLocal();renderAll();};
+    $('weeks').appendChild(b);
+  }
+  let tot=0;for(let w=1;w<=WEEKS;w++)tot+=weekPct(w);
+  $('overall').textContent=Math.round(tot/WEEKS*100)+'%';
+}
+function renderDays(){
+  $('days').innerHTML='';
+  PROGRAM.forEach(D=>{
+    const s=dayStats(week,D.key);
+    const b=document.createElement('button');
+    b.className='day'+(D.key===day?' on':'')+(s.done===s.total?' done':'')+(D.key===todayKey?' today':'');
+    b.innerHTML=`<span class="ck"></span><div class="d">${D.d}</div><div class="t">${short[D.key]}</div>`;
+    b.onclick=()=>{day=D.key;renderAll();};
+    $('days').appendChild(b);
+  });
+  const on=$('days').querySelector('.on'); if(on) on.scrollIntoView({inline:'nearest',block:'nearest'});
+}
+function renderHead(){
+  const D=PROGRAM.find(x=>x.key===day), s=dayStats(week,day);
+  $('dtitle').textContent=`${D.d} · ${D.title}`;
+  $('dcount').textContent=`${s.done} / ${s.total} done`;
+  $('dprog').style.width=(s.done/s.total*100)+'%';
+}
+function refreshMeta(){renderWeeks();renderDays();renderHead();}
+
+function prevWeight(i){
+  for(let w=week-1;w>=1;w--){const v=get(w,day,i).w;if(v)return {w,v};}
+  return null;
+}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+function renderList(){
+  const D=PROGRAM.find(x=>x.key===day), list=$('list'); list.innerHTML='';
+  let n=0;
+  D.items.forEach((it,i)=>{
+    const e=get(week,day,i), card=document.createElement('div');
+    if(it.run){
+      card.className='card run'+(e.done?' done':'');
+      card.innerHTML=`<div class="top"><div><div class="name">${esc(it.name)}</div><div class="sub">${esc(it.sub)}</div></div></div>
+        <div class="row">
+          <button class="runtoggle">${e.done?'✓ Done':'Mark done'}</button>
+          ${it.noDist?'':`<label class="field"><input inputmode="decimal" placeholder="0.0" data-f="dist" value="${esc(e.dist||'')}"><span>mi</span></label>`}
+          <label class="field"><input placeholder="0:00" data-f="time" value="${esc(e.time||'')}"><span>time</span></label>
+        </div>
+        <textarea rows="1" placeholder="Notes — pace, splits, how it felt" data-f="note">${esc(e.note||'')}</textarea>`;
+      card.querySelector('.runtoggle').onclick=()=>{put(week,day,i,{done:!get(week,day,i).done});renderList();refreshMeta();};
+      card.querySelectorAll('[data-f]').forEach(inp=>inp.oninput=()=>put(week,day,i,{[inp.dataset.f]:inp.value}));
+    } else {
+      n++;
+      const p=parse(it[1]), s=(e.s||[]).slice(), pw=prevWeight(i);
+      card.className='card'+(itemDone(week,day,i,it)?' done':'');
+      let setsHtml='';
+      for(let j=0;j<p.sets;j++){
+        if(p.amrap) setsHtml+=`<input class="set${s[j]?' on':''}" inputmode="numeric" placeholder="${j+1}" data-j="${j}" value="${esc(s[j]||'')}" aria-label="Set ${j+1} reps">`;
+        else setsHtml+=`<button class="set${s[j]?' on':''}" data-j="${j}" aria-label="Set ${j+1}">${j+1}</button>`;
+      }
+      card.innerHTML=`<div class="top"><div><div class="name"><span class="num">${String(n).padStart(2,'0')}</span>${esc(it[0])}</div>${pw?`<div class="prev">Wk${pw.w}: ${esc(pw.v)} lbs</div>`:''}</div><span class="pill">${p.sets} × ${p.amrap?'AMRAP':p.reps}</span></div>
+        <div class="row">
+          <label class="wt"><input inputmode="decimal" placeholder="${pw?esc(pw.v):'—'}" value="${esc(e.w||'')}"><span>lbs</span></label>
+          <div class="sets">${setsHtml}</div>
+        </div>`;
+      const wi=card.querySelector('.wt input');
+      wi.oninput=()=>put(week,day,i,{w:wi.value});
+      card.querySelectorAll('.set').forEach(el=>{
+        const j=+el.dataset.j;
+        const sync=()=>{card.classList.toggle('done',itemDone(week,day,i,it));refreshMeta();};
+        if(p.amrap){
+          el.oninput=()=>{const cur=(get(week,day,i).s||[]).slice();cur[j]=el.value.trim();el.classList.toggle('on',!!cur[j]);put(week,day,i,{s:cur});sync();};
+        } else {
+          el.onclick=()=>{const cur=(get(week,day,i).s||[]).slice();cur[j]=!cur[j];el.classList.toggle('on',cur[j]);put(week,day,i,{s:cur});sync();if(cur[j]&&autoRest)startTimer(lastRest);};
+        }
+      });
+    }
+    list.appendChild(card);
+  });
+}
+function renderAll(){refreshMeta();renderList();}
+
+// clear day
+$('clearDay').onclick=()=>{$('mtext').textContent=`Clear everything logged for Week ${week}, ${PROGRAM.find(x=>x.key===day).title}?`;$('modal').classList.add('show');};
+$('mno').onclick=()=>$('modal').classList.remove('show');
+$('myes').onclick=()=>{
+  Object.keys(state.log).forEach(key=>{if(key.startsWith(`${week}|${day}|`))delete state.log[key];});
+  touch();$('modal').classList.remove('show');renderAll();
+};
+
+// ---------- rest timer ----------
+let tEnd=0,tInt=null,lastRest=90;
+function fmt(sec){const s=Math.abs(sec);return (sec<0?'+':'')+Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+function tick(){
+  const left=Math.round((tEnd-Date.now())/1000);
+  $('clock').textContent=fmt(left);
+  $('timer').classList.toggle('over',left<0);
+  $('timer').classList.toggle('live',left>=0);
+}
+function startTimer(sec){lastRest=sec;tEnd=Date.now()+sec*1000;clearInterval(tInt);tInt=setInterval(tick,250);tick();}
+// once a rest length is picked, ticking off a set restarts the timer automatically
+let autoRest=false;
+document.querySelectorAll('.tbtn[data-t]').forEach(b=>b.onclick=()=>{autoRest=true;startTimer(+b.dataset.t);});
+$('tstop').onclick=()=>{autoRest=false;clearInterval(tInt);tInt=null;$('clock').textContent='0:00';$('timer').classList.remove('live','over');};
+
+// ---------- account sync (db) ----------
+let ref=null, writing=false, pending=false, debounce=null;
+function queueRemote(){ if(!ref) return; clearTimeout(debounce); debounce=setTimeout(flush,900); }
+async function flush(){
+  if(!ref) return;
+  if(writing){pending=true;return;}
+  writing=true;
+  try{ await ref.set({log:state.log,updatedAt:state.updatedAt}); $('syncnote').textContent='Saved to your account'; }
+  catch(e){ if(e&&(e.code==='invalid_argument'||e.code==='revoked')){ref=null;$('syncnote').textContent='Saved on this phone';} }
+  writing=false;
+  if(pending){pending=false;flush();}
+}
+(async()=>{
+  try{
+    if(!window.claude||!claude.use) return;
+    const [user,db]=await Promise.all([claude.use('user'),claude.use('db')]);
+    if(!user||!db) return;
+    const uid=await user.id(); if(!uid) return;
+    const r=db.doc(`data/users/${uid}/log`);
+    $('syncnote').textContent='Syncing…';
+    const snap=await Promise.race([r.get(),new Promise((_,rej)=>setTimeout(()=>rej({code:'timeout'}),10000))]);
+    ref=r;
+    const remote=snap.exists?snap.data():null;
+    if(remote && (remote.updatedAt||0) >= (state.updatedAt||0)){
+      state.log=JSON.parse(JSON.stringify(remote.log||{})); state.updatedAt=remote.updatedAt||0; saveLocal(); renderAll();
+      $('syncnote').textContent='Saved to your account';
+    } else if(Object.keys(state.log).length){
+      flush();
+    } else {
+      $('syncnote').textContent='Saved to your account';
+    }
+  }catch(e){ $('syncnote').textContent='Saved on this phone'; }
+})();
+
+renderAll();
+</script>
+</body>
+</html>
